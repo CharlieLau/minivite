@@ -1,0 +1,23 @@
+{
+  "name": "minivite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "mini-vite": "./bin/vite.js"
+  },
+  "keywords": [],
+  "author": "liuqingqing05",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "es-module-lexer": "^0.3.24",
+    "koa": "^2.13.0",
+    "koa-static": "^5.0.0",
+    "magic-string": "^0.25.7",
+    "minimist": "^1.2.5"
+  }
+}
