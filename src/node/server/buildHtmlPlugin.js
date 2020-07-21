@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs').promises
+const { clientPublicPath } = require('./util')
 module.exports = function ({ root, app }) {
     app.use(async (ctx, next) => {
         if (ctx.path === '/') {
@@ -8,14 +9,9 @@ module.exports = function ({ root, app }) {
 
             content = content.replace(/<\/head>/, function (...args) {
                 return `<script type="module">
-                        window.process={
-                            env:{
-                                NODE_ENV:'development'
-                            }
-                        }
+                        import '${clientPublicPath}'
                     </script>
                 </head>`
-
             })
 
             ctx.type = 'html'

@@ -6,7 +6,7 @@ const moduleResolvePlugin = require('./moduleResolvePlugin')
 const vuePlugin = require("./vuePlugin")
 const buildHtmlPlugin = require('./buildHtmlPlugin')
 const cssResolvePlugin = require('./cssResolvePlugin')
-
+const clientPlugin = require("./clientPlugin")
 
 function createServer() {
     const root = process.cwd()
@@ -23,6 +23,7 @@ function createServer() {
         cssResolvePlugin,
         moduleResolvePlugin,
         vuePlugin,
+        clientPlugin,
         serverStaticPlugin
     ]
 

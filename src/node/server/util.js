@@ -54,3 +54,11 @@ const fontsRE = /\.(woff2?|eot|ttf|otf)(\?.*)?$/i
 exports.isStaticAsset = (file) => {
     return imageRE.test(file) || mediaRE.test(file) || fontsRE.test(file)
 }
+
+
+exports.isImportRequest = (ctx) => {
+    return ctx.query.import != null
+}
+
+exports.clientPublicPath = `/vite/client`
+

@@ -39,7 +39,15 @@ module.exports = function vuePlugin({ app, root }) {
         if (ctx.query.type === 'template') {
             ctx.type = 'js'
             let content = descriptor.template.content
-            const { code } = compileTemplate({ source: content })
+            const publicPath = ctx.path; undefined
+
+            const { code } = compileTemplate({
+                source: content,
+                // src 重写
+                transformAssetUrls: {
+                    base: path.posix.dirname(publicPath),
+                }
+            })
             ctx.body = code
         }
         if (ctx.query.type === 'style') {
