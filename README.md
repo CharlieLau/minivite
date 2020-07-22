@@ -28,4 +28,6 @@ npm install && npm link
 ```
 cd  example && yarn && mini-vite
 
+-- open  http://localhost:3000
+
 ```
