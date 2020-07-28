@@ -62,3 +62,19 @@ exports.isImportRequest = (ctx) => {
 
 exports.clientPublicPath = `/vite/client`
 
+
+
+exports.codegenCss = (id, css, modules) => {
+
+    let code =
+        `import { updateStyle } from "${exports.clientPublicPath}"\n` +
+        `const css = ${JSON.stringify(css)}\n` +
+        `updateStyle(${JSON.stringify(id)}, css)\n`
+    if (modules) {
+        code += `export default ${JSON.stringify(modules)}`
+    } else {
+        code += `export default css`
+    }
+    return code
+
+}
