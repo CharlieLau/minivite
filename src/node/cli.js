@@ -2,6 +2,8 @@
 const chalk = require('chalk')
 const argv = require('minimist')(process.argv.slice(2))
 
+const { port } = require("./server/util")
+
 
 
     ; (async () => {
@@ -32,8 +34,7 @@ const argv = require('minimist')(process.argv.slice(2))
 
 async function runServe() {
     const Server = require('./server')
-
-    Server.listen(3000, () => {
+    Server.listen(port, () => {
         console.log(chalk.cyan('[mini-vite]') + 'Server: http://localhost:3000')
     })
 }

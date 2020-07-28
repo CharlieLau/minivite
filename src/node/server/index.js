@@ -7,14 +7,19 @@ const vuePlugin = require("./vuePlugin")
 const buildHtmlPlugin = require('./buildHtmlPlugin')
 const cssResolvePlugin = require('./cssResolvePlugin')
 const clientPlugin = require("./clientPlugin")
+const hmrPlugin = require('./hmrPlugin')
 
 function createServer() {
     const root = process.cwd()
     const app = new Koa()
 
+    const server = require('http').createServer(app.callback())
+
     const context = {
         root,
-        app
+        app,
+        server,
+        port: 3000
     }
 
     const middlewares = [
@@ -24,12 +29,20 @@ function createServer() {
         moduleResolvePlugin,
         vuePlugin,
         clientPlugin,
+        hmrPlugin,
         serverStaticPlugin
     ]
 
     middlewares.forEach(middleware => middleware(context))
 
-    return app;
+    const listen = server.listen.bind(server)
+    server.listen = ((port, ...args) => {
+        context.port = port
+        return listen(port, ...args)
+    })
+    return server
+
+    // return app;
 }
 
 
