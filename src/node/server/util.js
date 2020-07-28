@@ -55,6 +55,9 @@ exports.isStaticAsset = (file) => {
     return imageRE.test(file) || mediaRE.test(file) || fontsRE.test(file)
 }
 
+const cssPreprocessLangRE = /(.+)\.(less|sass|scss|styl|stylus|postcss)$/
+exports.isCSSRequest = (file) =>
+    file.endsWith('.css') || cssPreprocessLangRE.test(file)
 
 exports.isImportRequest = (ctx) => {
     return ctx.query.import != null

@@ -1,5 +1,6 @@
 
 const Koa = require('koa')
+const chokidar = require('chokidar')
 const serverStaticPlugin = require('./serverStaticPlugin')
 const moduleRewritePlugin = require('./moduleRewritePlugin')
 const moduleResolvePlugin = require('./moduleResolvePlugin')
@@ -15,11 +16,15 @@ function createServer() {
 
     const server = require('http').createServer(app.callback())
 
+    const watcher = chokidar.watch(root, {
+        ignored: [/\bnode_modules\b/, /\b\.git\b/]
+    })
     const context = {
         root,
         app,
         server,
-        port: 3000
+        port: 3000,
+        watcher
     }
 
     const middlewares = [

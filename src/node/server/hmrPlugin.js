@@ -1,5 +1,6 @@
 const WebSocket = require('ws')
-module.exports = function ({ root, app, server }) {
+const { isCSSRequest } = require('./util')
+module.exports = function ({ root, app, server, watcher }) {
     app.use(async (ctx, next) => {
         return next()
     })
@@ -17,5 +18,18 @@ module.exports = function ({ root, app, server }) {
     })
 
     wss.on('error', (e) => {
+    })
+
+    const handleJSReload = (watcher.handleJSReload = (filePath, timestamp = Date.now()) => {
+
+    })
+
+
+    watcher.on('change', file => {
+        if (!(file.endsWith('.vue') || isCSSRequest(file))) {
+            // everything except plain .css are considered HMR dependencies.
+            // plain css has its own HMR logic in ./serverPluginCss.ts.
+            handleJSReload(file)
+        }
     })
 }
