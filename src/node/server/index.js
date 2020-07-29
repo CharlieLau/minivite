@@ -1,14 +1,17 @@
 
 const Koa = require('koa')
 const chokidar = require('chokidar')
+const slash = require('slash')
+const path = require('path')
 const serverStaticPlugin = require('./serverStaticPlugin')
 const moduleRewritePlugin = require('./moduleRewritePlugin')
-const moduleResolvePlugin = require('./moduleResolvePlugin')
-const vuePlugin = require("./vuePlugin")
+const { moduleResolvePlugin, moduleFileToIdMap } = require('./moduleResolvePlugin')
+const { vuePlugin } = require("./vuePlugin")
 const buildHtmlPlugin = require('./buildHtmlPlugin')
 const cssResolvePlugin = require('./cssResolvePlugin')
 const clientPlugin = require("./clientPlugin")
 const hmrPlugin = require('./hmrPlugin')
+
 
 function createServer() {
     const root = process.cwd()
@@ -19,12 +22,29 @@ function createServer() {
     const watcher = chokidar.watch(root, {
         ignored: [/\bnode_modules\b/, /\b\.git\b/]
     })
+
+    const fileToRequestCache = new Map()
+
+
+    const resolver = {
+        fileToRequest(filePath) {
+            if (fileToRequestCache.has(filePath)) {
+                return fileToRequestCache.get(filePath)
+            }
+            const res = defaultFileToRequest(filePath, root)
+            fileToRequestCache.set(filePath, res)
+            return res
+        }
+
+    }
+
     const context = {
         root,
         app,
         server,
         port: 3000,
-        watcher
+        watcher,
+        resolver
     }
 
     const middlewares = [
@@ -49,6 +69,15 @@ function createServer() {
 
     // return app;
 }
+
+function defaultFileToRequest(filePath, root) {
+    const moduleRequest = moduleFileToIdMap.get(filePath)
+    if (moduleRequest) {
+        return moduleRequest
+    }
+    return `/${slash(path.relative(root, filePath))}`
+}
+
 
 
 

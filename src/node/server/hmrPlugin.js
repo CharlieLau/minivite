@@ -24,6 +24,16 @@ module.exports = function ({ root, app, server, watcher }) {
 
     })
 
+    const send = (watcher.send = (payload) => {
+        const stringified = JSON.stringify(payload, null, 2)
+
+        wss.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(stringified)
+            }
+        })
+    })
+
 
     watcher.on('change', file => {
         if (!(file.endsWith('.vue') || isCSSRequest(file))) {

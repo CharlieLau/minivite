@@ -11,7 +11,7 @@ const CSS_RE = /\.css$/
 module.exports = function ({ app, root }) {
     app.use(async (ctx, next) => {
         await next()
-        if (ctx.response.is('js')) {
+        if (ctx.response.is('js') && (ctx.path !== '/vite/client' && ctx.path !== '/vite/hmr')) {
             const data = await readStream(ctx.body)
             const str = new MagicString(data)
             const imports = parse(data)[0]

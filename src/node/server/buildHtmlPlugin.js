@@ -7,13 +7,9 @@ module.exports = function ({ root, app }) {
             const htmlPath = path.resolve(root, 'index.html')
             let content = await fs.readFile(htmlPath, 'utf8')
 
-            content = content.replace(/<\/head>/, function (...args) {
-                return `<script type="module">
-                        import '${clientPublicPath}'
-                    </script>
-                </head>`
+            content = content.replace(/<head>/, function (...args) {
+                return `<head><script type="module">import '${clientPublicPath}'</script>`
             })
-
             ctx.type = 'html'
             ctx.body = content
             return

@@ -1,7 +1,8 @@
 
 const { Readable } = require("stream")
 const path = require('path')
-const { type } = require("os")
+const fs = require('fs')
+const LRUCache = require('lru-cache')
 
 exports.readStream = async function (stream) {
 
@@ -39,7 +40,8 @@ exports.resolveVue = function resolveVue(root) {
         '@vue/reactivity': reactivityPath,
         '@vue/shared': sharedPath,
         // else
-        'lodash-es': path.resolve(root, 'node_modules', 'lodash-es/lodash.js')
+        'lodash-es': path.resolve(root, 'node_modules', 'lodash-es/lodash.js'),
+        isLocal: true
     }
 }
 
@@ -79,8 +81,30 @@ exports.codegenCss = (id, css, modules) => {
         code += `export default css`
     }
     return code
-
 }
 
 
 exports.port = 3000
+
+
+const fsReadCache = new LRUCache({
+    max: 10000
+})
+
+exports.cachedRead = function cachedRead(ctx, file) {
+    const lastModified = fs.statSync(file).mtimeMs
+    const cached = fsReadCache.get(file)
+
+    if (cached && cached.lastModified === lastModified) {
+        return cached.content
+    }
+
+    const content = fs.readFileSync(file, 'utf8')
+
+    fsReadCache.set(file, {
+        content,
+        lastModified
+    })
+
+    return content
+}
