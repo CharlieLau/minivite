@@ -10,7 +10,7 @@ const { vuePlugin } = require("./vuePlugin")
 const buildHtmlPlugin = require('./buildHtmlPlugin')
 const cssResolvePlugin = require('./cssResolvePlugin')
 const clientPlugin = require("./clientPlugin")
-const hmrPlugin = require('./hmrPlugin')
+const { hmrPlugin } = require('./hmrPlugin')
 
 
 function createServer() {
@@ -24,8 +24,6 @@ function createServer() {
     })
 
     const fileToRequestCache = new Map()
-
-
     const resolver = {
         fileToRequest(filePath) {
             if (fileToRequestCache.has(filePath)) {
@@ -35,7 +33,6 @@ function createServer() {
             fileToRequestCache.set(filePath, res)
             return res
         }
-
     }
 
     const context = {
@@ -77,8 +74,6 @@ function defaultFileToRequest(filePath, root) {
     }
     return `/${slash(path.relative(root, filePath))}`
 }
-
-
 
 
 module.exports = createServer()

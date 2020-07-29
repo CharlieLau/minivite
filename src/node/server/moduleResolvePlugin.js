@@ -8,6 +8,7 @@ const { resolvePtr } = require('dns')
 
 const moduleFileToIdMap = new Map()
 const moduleIdToFileMap = new Map()
+
 exports.moduleIdToFileMap = moduleIdToFileMap
 exports.moduleFileToIdMap = moduleFileToIdMap
 

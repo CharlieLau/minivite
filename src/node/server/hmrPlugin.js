@@ -1,6 +1,12 @@
 const WebSocket = require('ws')
 const { isCSSRequest } = require('./util')
-module.exports = function ({ root, app, server, watcher }) {
+
+const importerMap = new Map()
+const importeeMap = new Map()
+exports.importerMap = importerMap
+exports.importeeMap = importeeMap
+
+exports.hmrPlugin = function hmrPlugin({ root, app, server, watcher }) {
     app.use(async (ctx, next) => {
         return next()
     })
@@ -21,6 +27,8 @@ module.exports = function ({ root, app, server, watcher }) {
     })
 
     const handleJSReload = (watcher.handleJSReload = (filePath, timestamp = Date.now()) => {
+
+
 
     })
 
